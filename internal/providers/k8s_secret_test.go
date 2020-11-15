@@ -30,7 +30,6 @@ func configureTestClient() (v13.SecretInterface, error) {
 	return k8sClient, err
 }
 
-
 func TestK8SSecretProvider_GetSecret(t *testing.T) {
 	k8sClient, err := configureTestClient()
 	assert.NoError(t, err)
