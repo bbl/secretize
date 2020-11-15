@@ -1,0 +1,10 @@
+apiVersion: secretize/v1
+kind: SecretGenerator
+metadata:
+  name: env-kv-secrets
+sources:
+    - provider: env
+      kv:
+        - MY_KV_SECRET
+      literals: 
+        - MY_LITERAL_SECRET
