@@ -15,7 +15,7 @@ Secretize is able to generate secrets using the following providers:
 - [Azure Vault](https://docs.microsoft.com/en-us/azure/key-vault/)
 - [Hashicorp Vault](https://www.vaultproject.io/)
 - [Other K8S secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
-- Environment variables
+- [Environment variables](https://en.wikipedia.org/wiki/Environment_variable)
 
 It is possible to use multiple providers at once.
 
