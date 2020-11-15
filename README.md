@@ -30,15 +30,21 @@ It is possible to use multiple providers at once.
 
 ## Installation
 
-Install secretize to your `$XDG_CONFIG_HOME/kustomize/plugins` folder:
+Install secretize to your `$XDG_CONFIG_HOME/kustomize/plugin` folder:
+
+1. Export the `XDG_CONFIG_HOME` variable if it's not already set:
 
 ```bash
-# todo
-mkdir -p ...
-curl github/releases... 
+export XDG_CONFIG_HOME=~/.config
 ```
 
+2. Download the release binary into the kustomize plugin folder:
 
+```bash
+export SECRETIZE_DIR="$XDG_CONFIG_HOME/kustomize/plugin/secretize/v1/secretgenerator"
+mkdir -p "$SECRETIZE_DIR"
+curl -L https://github.com/bbl/secretize/releases/download/v0.0.1/secretize-v0.0.1-linux-amd64.tar.gz  | tar -xz -C $SECRETIZE_DIR
+```
 
 ## Usage
 
