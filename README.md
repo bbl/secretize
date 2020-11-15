@@ -5,7 +5,7 @@
 It's like a swiss army knife, but for kubernetes secrets. </i> 
   <br>
   <br>
-  <img src="https://goreportcard.com/badge/github.com/bbl/secretize" />
+  <img src="https://goreportcard.com/badge/github.com/bbl/secretize" /> <img src="https://github.com/bbl/secretize/workflows/CI/badge.svg">
   
 </p>
 
