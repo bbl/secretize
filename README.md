@@ -121,7 +121,6 @@ sources:
       kv: 
         - secret/data/mySecret # you need to specify the full path in hashicorp vault provider
 ```
-=> generates
 ```yaml
 apiVersion: v1
 kind: Secret
