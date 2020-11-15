@@ -1,5 +1,5 @@
 on: push
-name: My cool Action
+name: CI
 jobs:
   checks:
     name: run
