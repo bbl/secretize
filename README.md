@@ -1,8 +1,10 @@
 <p  align="center">
   <img width="409" height="450" src=".assets/logo.png"/>
   <br>
-<i> Secretize is a kustomize plugin that helps to generate kubernetes secrets from various sources.  <br>
-It's like a swiss army knife, but for kubernetes secrets. </i>
+<i> Secretize is a kustomize plugin that helps generating kubernetes secrets from various sources.  <br>
+It's like a swiss army knife, but for kubernetes secrets. </i> <br>
+  <img src="https://goreportcard.com/badge/github.com/bbl/secretize" />
+  
 </p>
 
 ---
