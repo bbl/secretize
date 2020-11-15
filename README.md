@@ -4,7 +4,6 @@
 
 Secretize is a kustomize plugin that helps to generate kubernetes secrets from various sources.  
 It's like a swiss army knife, but for kubernetes secrets. 
- 
 
 ---
 
@@ -35,57 +34,127 @@ curl github/releases...
 
 ## Usage
 
-There are two types of secrets: `literals` and `kv`. 
-Literal secrets simply generate a single string output, while KV secrets will output with a dictionary of the key-value pairs. 
-Some providers return only KV data by default (e.g. Hashicorp Vault and K8S Secret data), while others (AWS Secret Manager, Azure Vault and Environment variables) always output a single string. If you try to query `kv` secrets from later, secretize would treat the output as JSON and try to generate a `kv` output, e.g.:
+All providers can generate two types of secrets: `literals` and `kv` (Key-Value secrets).  
+Literal secrets simply generate a single string output, while KV secrets will output with a dictionary of the key-value pairs.   
+Fetching literal secrets is as simple, as using a default kustomize `secretGenerator` plugin:
 
-```bash
-export MY_KV_SECRET='{"secret_key_1":"secret_value_1", "secret_key_2": "secret_value_2"}'
-export MY_LITERAL_SECRET=super_secret
-
-cat <<'EOF' >./config.yaml
+```yaml
 apiVersion: secretize/v1
 kind: SecretGenerator
 metadata:
-  name: env-kv-secrets
+  name: aws-sm-secrets
 sources:
-    - provider: env
-      kv:
-        - MY_KV_SECRET
+    - provider: aws-sm
       literals: 
-        - MY_LITERAL_SECRET
-EOF
+        - mySecret
+        - newName=mySecret 
 ```
 
-Secretize would generate the following secret using the config above:
+The above config would query AWS Secrets Manager provider to get the `mySecret` string value. As a result, the following manifest will be generated:
 
 ```yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: env-kv-secrets
+  name: aws-sm-secrets
 data:
-  MY_LITERAL_SECRET: c3VwZXJfc2VjcmV0
-  secret_key_1: c2VjcmV0X3ZhbHVlXzE=
-  secret_key_2: c2VjcmV0X3ZhbHVlXzI=
+  mySecret: c2VjcmV0X3ZhbHVlXzE= # a sample base64 encoded data 
+  newName: c2VjcmV0X3ZhbHVlXzE=
+```
+ 
+Now let's assume that value of `mySecret` is a json string:
+```json
+{
+  "secret_key_1":"secret_value_1", 
+  "secret_key_2": "secret_value_2"
+}
 ```
 
-
-
-
-### AWS Secret Manager
+The generator config can be slightly modified, to generate a `kv` secret:
 
 ```yaml
 apiVersion: secretize/v1
 kind: SecretGenerator
 metadata:
-  name: my-aws-secrets
+  name: aws-sm-secrets
 sources:
     - provider: aws-sm
-      literals:
-          - my-secret-1
-          - SECRET_NAME=my-secret-1
+      kv: 
+        - mySecret
+```
+
+As a result, the following secret is generated:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-sm-secrets
+data:
+  secret_key_1: c2VjcmV0X3ZhbHVlXzE=
+  secret_key_2: c2VjcmV0X3ZhbHVlXzI=
 ```
 
 
+## Hashicorp Vault
+
+Some providers only support key-value output, e.g. Hashicorp Vault and K8S Secret. 
+For instance, the `mySecret` in Hashicorp Vault might look like the following:
+```bash
+vault kv get secret/mySecret
+====== Data ======
+Key           Value
+---           -----
+secret_key_1  secret_value_1
+secret_key_2  secret_value_1
+```
+
+Querying provider's `kv` secrets will generate the corresponding key-value data:
+
+```yaml
+apiVersion: secretize/v1
+kind: SecretGenerator
+metadata:
+  name: hashicorp-vault-secrets
+sources:
+    - provider: hashicorp-vault
+      kv: 
+        - secret/data/mySecret # you need to specify the full path in hashicorp vault provider
+```
+=> generates
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hashicorp-vault-secrets
+data:
+  secret_key_1: c2VjcmV0X3ZhbHVlXzE=
+  secret_key_2: c2VjcmV0X3ZhbHVlXzI=
+```
+
+However you're able to query a certain literal in the key-value output using the following syntax: `secret-name:key`, e.g.:
+  
+```yaml
+apiVersion: secretize/v1
+kind: SecretGenerator
+metadata:
+  name: hashicorp-vault-secrets
+sources:
+    - provider: hashicorp-vault
+      literals:
+          - secret/data/mySecret-1:secret_key_1
+```
+
+As a result, the following manifest will be generated:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hashicorp-vault-secrets
+data:
+  secret_key_1: c2VjcmV0X3ZhbHVlXzE=
+```
+
+The same pattern applies to K8S Secret provider. 
 
