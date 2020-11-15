@@ -37,7 +37,7 @@ curl github/releases...
 All providers can generate two types of secrets: `literals` and `kv` (Key-Value secrets).  
 Literal secrets simply generate a single string output, while KV secrets will output with a dictionary of the key-value pairs.   
 
-The full configuration API could be found in the [./examples/secret-generator.yaml](./examples/secret-generator.yaml) file.
+The full configuration API could be found in the [examples/secret-generator.yaml](./examples/secret-generator.yaml) file.
 
 ### AWS Secrets Manager
 
