@@ -155,5 +155,5 @@ data:
   secret_key_1: c2VjcmV0X3ZhbHVlXzE=
 ```
 
-The same pattern applies to K8S Secret provider. 
+The same pattern applies to the K8S Secret provider. 
 
