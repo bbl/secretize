@@ -36,6 +36,7 @@ curl github/releases...
 
 All providers can generate two types of secrets: `literals` and `kv` (Key-Value secrets).  
 Literal secrets simply generate a single string output, while KV secrets will output with a dictionary of the key-value pairs.   
+
 Fetching literal secrets is as simple, as using a default kustomize `secretGenerator` plugin:
 
 ```yaml
