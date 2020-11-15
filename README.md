@@ -5,7 +5,11 @@
 It's like a swiss army knife, but for kubernetes secrets. </i> 
   <br>
   <br>
-  <img src="https://goreportcard.com/badge/github.com/bbl/secretize" /> <img src="https://github.com/bbl/secretize/workflows/CI/badge.svg">
+  <img src="https://goreportcard.com/badge/github.com/bbl/secretize" />
+   <img src="https://github.com/bbl/secretize/workflows/CI/badge.svg">
+   <a href="https://codecov.io/gh/bbl/secretize">
+     <img src="https://codecov.io/gh/bbl/secretize/branch/main/graph/badge.svg" />
+   </a>
   
 </p>
 

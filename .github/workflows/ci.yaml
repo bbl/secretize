@@ -18,6 +18,8 @@ jobs:
           args: make test
 
       - name: publish code coverage results
-        run: bash <(curl -s https://codecov.io/bash)
+        run: |
+          go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+          bash <(curl -s https://codecov.io/bash)
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
