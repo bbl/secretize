@@ -3,7 +3,7 @@ package generator
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/bbl/kustomize-secrets/internal/providers"
+	"github.com/bbl/secretize/internal/providers"
 	"github.com/stretchr/testify/assert"
 	"sigs.k8s.io/kustomize/api/types"
 	"testing"

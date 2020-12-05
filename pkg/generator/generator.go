@@ -2,9 +2,9 @@ package generator
 
 import (
 	"encoding/base64"
-	"github.com/bbl/kustomize-secrets/internal/k8s"
-	"github.com/bbl/kustomize-secrets/internal/providers"
-	"github.com/bbl/kustomize-secrets/pkg/utils"
+	"github.com/bbl/secretize/internal/k8s"
+	"github.com/bbl/secretize/internal/providers"
+	"github.com/bbl/secretize/pkg/utils"
 	"gopkg.in/yaml.v2"
 	"sigs.k8s.io/kustomize/api/types"
 	"strings"

@@ -1,4 +1,4 @@
-module github.com/bbl/kustomize-secrets
+module github.com/bbl/secretize
 
 go 1.13
 

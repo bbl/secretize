@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/bbl/kustomize-secrets/pkg/generator"
-	"github.com/bbl/kustomize-secrets/pkg/utils"
+	"github.com/bbl/secretize/pkg/generator"
+	"github.com/bbl/secretize/pkg/utils"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 
