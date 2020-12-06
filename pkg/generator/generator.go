@@ -14,7 +14,7 @@ type RegistryFunc func(params map[string]string) map[string]func() (providers.Se
 
 func ProviderRegistry(params map[string]string) map[string]func() (providers.SecretsProvider, error) {
 	return map[string]func() (providers.SecretsProvider, error){
-		"aws-ssm":         providers.NewAwsSMProvider,
+		"aws-sm":         providers.NewAwsSMProvider,
 		"hashicorp-vault": providers.NewHashicorpVaultProvider,
 		"azure-vault": func() (providers.SecretsProvider, error) {
 			return providers.NewAzureVaultProvider(params["name"])
