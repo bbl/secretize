@@ -46,6 +46,7 @@ sources:
 	conf, err := ParseConfig([]byte(confStr))
 	assert.NoError(t, err)
 	assert.Equal(t, "hashicorp-vault", conf.Sources[0].Provider)
+	assert.Equal(t, "merge", conf.Meta.Annotations["kustomize.config.k8s.io/behavior"])
 }
 
 type fakeProvider struct {
