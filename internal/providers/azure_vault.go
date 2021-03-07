@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"github.com/Azure/azure-sdk-for-go/profiles/latest/keyvault/keyvault"
 	"github.com/Azure/azure-sdk-for-go/profiles/latest/keyvault/keyvault/keyvaultapi"
-	kvauth "github.com/Azure/azure-sdk-for-go/services/keyvault/auth"
+	"github.com/Azure/go-autorest/autorest"
+	"github.com/Azure/go-autorest/autorest/azure/auth"
+	"os"
+	"strings"
 )
 
 func AzureVaultUrl(vaultName string) string {
@@ -18,7 +21,7 @@ type AzureVaultProvider struct {
 }
 
 func NewAzureVaultProvider(vaultName string) (SecretsProvider, error) {
-	authorizer, err := kvauth.NewAuthorizerFromEnvironment()
+	authorizer, err := getAuthorizer()
 	if err != nil {
 		return nil, err
 	}
@@ -37,4 +40,36 @@ func (p *AzureVaultProvider) GetSecret(name string) (string, error) {
 
 func (p *AzureVaultProvider) GetKVSecrets(name string) (map[string]string, error) {
 	return jsonKVSecrets(p, name)
+}
+
+func getAuthorizer() (autorest.Authorizer, error) {
+	settings, err := auth.GetSettingsFromEnvironment()
+	if err != nil {
+		return nil, err
+	}
+	settings.Values[auth.Resource] = strings.TrimSuffix(settings.Environment.KeyVaultEndpoint, "/")
+
+	// based on Azure SDK EnvironmentSettings.GetAuthorizer()
+	//1.Client Credentials
+	if c, e := settings.GetClientCredentials(); e == nil {
+		return c.Authorizer()
+	}
+
+	//2. Client Certificate
+	if c, e := settings.GetClientCertificate(); e == nil {
+		return c.Authorizer()
+	}
+
+	//3. Username Password
+	if c, e := settings.GetUsernamePassword(); e == nil {
+		return c.Authorizer()
+	}
+
+	// 4. MSI
+	if _, present := os.LookupEnv("AZURE_USE_MSI"); present {
+		return settings.GetMSI().Authorizer()
+	}
+
+	// 5. CLI
+	return auth.NewAuthorizerFromCLIWithResource(settings.Values[auth.Resource])
 }
