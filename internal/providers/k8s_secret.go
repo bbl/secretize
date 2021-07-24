@@ -5,6 +5,7 @@ import (
 	v12 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	v1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/tools/clientcmd"
+	"os"
 )
 
 type K8SSecretProvider struct {
@@ -54,7 +55,9 @@ func (p *K8SSecretProvider) GetKVSecrets(path string) (map[string]string, error)
 }
 
 func NewK8SSecretProvider(namespace string) (SecretsProvider, error) {
-	config, err := clientcmd.BuildConfigFromFlags("", "")
+	kubeConfigPath := os.Getenv("KUBECONFIG")
+
+	config, err := clientcmd.BuildConfigFromFlags("", kubeConfigPath)
 	if err != nil {
 		return nil, err
 	}

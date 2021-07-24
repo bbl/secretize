@@ -5,6 +5,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/profiles/latest/keyvault/keyvault"
 	"github.com/Azure/azure-sdk-for-go/profiles/latest/keyvault/keyvault/keyvaultapi"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -64,6 +65,17 @@ func TestAzureVaultProvider_GetKVSecretsErr(t *testing.T) {
 }
 
 func TestNewAzureVaultProvider(t *testing.T) {
+	assert.NoError(t, os.Setenv("AZURE_CLIENT_ID", "test"))
+	assert.NoError(t, os.Setenv("AZURE_CLIENT_SECRET", "test"))
+
 	_, err := NewAzureVaultProvider("")
 	assert.NoError(t, err)
+}
+
+func TestNewAzureVaultProviderErr(t *testing.T) {
+	assert.NoError(t, os.Unsetenv("AZURE_CLIENT_ID"))
+	assert.NoError(t, os.Unsetenv("AZURE_CLIENT_SECRET"))
+
+	_, err := NewAzureVaultProvider("")
+	assert.Error(t, err)
 }

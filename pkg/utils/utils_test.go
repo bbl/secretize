@@ -1,7 +1,9 @@
 package utils
 
 import (
-	"github.com/magiconair/properties/assert"
+	"errors"
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -27,4 +29,17 @@ func TestMerge(t *testing.T) {
 		"k":  "v",
 		"k2": "v2",
 	})
+}
+
+func TestFatalErrCheck(t *testing.T) {
+	exited := false
+	logrus.StandardLogger().ExitFunc = func(i int) {
+		exited = true
+	}
+	FatalErrCheck(errors.New("fatal error"))
+	assert.True(t, exited)
+
+	exited = false
+	FatalErrCheck(nil)
+	assert.False(t, exited)
 }
