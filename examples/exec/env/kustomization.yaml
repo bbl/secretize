@@ -1,0 +1,8 @@
+# Exec KRM Function example
+# This approach uses the KRM function specification with local executable
+
+resources:
+  - deployment.yaml
+
+generators:
+  - secret-generator.yaml 
