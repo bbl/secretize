@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # HashiCorp Vault for testing
+  vault:
+    image: hashicorp/vault:1.15
+    container_name: secretize-vault-test
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: myroot
+      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+      VAULT_ADDR: http://127.0.0.1:8200
+    cap_add:
+      - IPC_LOCK
+    command: vault server -dev -dev-root-token-id=myroot
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - ./vault-data:/vault/data
+
+  # Setup container to initialize Vault with test secrets
+  setup:
+    image: hashicorp/vault:1.15
+    container_name: secretize-vault-setup
+    depends_on:
+      vault:
+        condition: service_healthy
+    environment:
+      VAULT_ADDR: http://vault:8200
+      VAULT_TOKEN: myroot
+    command: >
+      sh -c "
+        echo 'Waiting for Vault to be ready...' &&
+        sleep 5 &&
+        echo 'Creating test secrets...' &&
+        vault kv put secret/data/docker-app/database-url value='postgresql://vault-user:vault-pass@vault-db:5432/vault_db' &&
+        vault kv put secret/data/docker-app/api-key value='vault-api-key-12345' &&
+        vault kv put secret/data/docker-app/jwt-secret value='super-secret-jwt-signing-key' &&
+        vault kv put secret/data/docker-app/app-config debug=true log_level=info max_connections=100 timeout=30s &&
+        vault kv put secret/data/docker-app/feature-flags new_ui=true beta_features=false experimental=true dark_mode=enabled &&
+        echo 'Vault setup complete!' &&
+        echo 'Vault UI: http://localhost:8200 (token: myroot)'
+      "
+
+networks:
+  default:
+    name: vault-network
+    driver: bridge 
