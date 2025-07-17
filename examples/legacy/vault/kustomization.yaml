@@ -1,0 +1,8 @@
+# Containerized KRM Function example
+# This approach uses the KRM function specification with Docker container
+
+resources:
+  - deployment.yaml
+
+generators:
+  - secret-generator.yaml 
