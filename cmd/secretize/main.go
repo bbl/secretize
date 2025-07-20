@@ -2,14 +2,12 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-
-	"github.com/bbl/secretize/pkg/generator"
-	"github.com/bbl/secretize/pkg/utils"
-	log "github.com/sirupsen/logrus"
-
 	"os"
 	"path/filepath"
+
+	"github.com/DevOpsHiveHQ/secretize/pkg/generator"
+	"github.com/DevOpsHiveHQ/secretize/pkg/utils"
+	log "github.com/sirupsen/logrus"
 
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
@@ -39,7 +37,7 @@ func runLegacyMode() {
 	}
 
 	filename, _ := filepath.Abs(os.Args[1])
-	yamlFile, err := ioutil.ReadFile(filename)
+	yamlFile, err := os.ReadFile(filename)
 	utils.FatalErrCheck(err)
 
 	secretGenerator, err := generator.ParseConfig(yamlFile)

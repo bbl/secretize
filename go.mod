@@ -1,4 +1,4 @@
-module github.com/bbl/secretize
+module github.com/DevOpsHiveHQ/secretize
 
 go 1.19
 

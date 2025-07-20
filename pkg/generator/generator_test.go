@@ -3,10 +3,11 @@ package generator
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/bbl/secretize/internal/providers"
+	"testing"
+
+	"github.com/DevOpsHiveHQ/secretize/internal/providers"
 	"github.com/stretchr/testify/assert"
 	"sigs.k8s.io/kustomize/api/types"
-	"testing"
 )
 
 var (
