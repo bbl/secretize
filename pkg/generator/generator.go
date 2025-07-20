@@ -2,19 +2,20 @@ package generator
 
 import (
 	"encoding/base64"
-	"github.com/bbl/secretize/internal/k8s"
-	"github.com/bbl/secretize/internal/providers"
-	"github.com/bbl/secretize/pkg/utils"
+	"strings"
+
+	"github.com/DevOpsHiveHQ/secretize/internal/k8s"
+	"github.com/DevOpsHiveHQ/secretize/internal/providers"
+	"github.com/DevOpsHiveHQ/secretize/pkg/utils"
 	"gopkg.in/yaml.v2"
 	"sigs.k8s.io/kustomize/api/types"
-	"strings"
 )
 
 type RegistryFunc func(params map[string]string) map[string]func() (providers.SecretsProvider, error)
 
 func ProviderRegistry(params map[string]string) map[string]func() (providers.SecretsProvider, error) {
 	return map[string]func() (providers.SecretsProvider, error){
-		"aws-sm":         providers.NewAwsSMProvider,
+		"aws-sm":          providers.NewAwsSMProvider,
 		"hashicorp-vault": providers.NewHashicorpVaultProvider,
 		"azure-vault": func() (providers.SecretsProvider, error) {
 			return providers.NewAzureVaultProvider(params["name"])
@@ -64,9 +65,10 @@ func (l *Literal) UnmarshalYAML(unmarshal func(interface{}) error) error {
 		return nil
 	}
 
-	res := strings.Split(stringLiteral, "=")
-	l.Key = res[0]
-	l.Value = res[1]
+	// Split on the first "=" only
+	idx := strings.Index(stringLiteral, "=")
+	l.Key = stringLiteral[:idx]
+	l.Value = stringLiteral[idx+1:]
 
 	return nil
 }

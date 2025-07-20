@@ -1,0 +1,9 @@
+# Legacy Kustomize plugin example
+# This approach uses the traditional Kustomize plugin system
+# where the plugin is installed in $XDG_CONFIG_HOME/kustomize/plugin
+
+generators:
+  - secret-generator.yaml
+
+resources:
+  - deployment.yaml 

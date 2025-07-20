@@ -5,10 +5,10 @@
 It's like a swiss army knife, but for kubernetes secrets. </i> 
   <br>
   <br>
-  <img src="https://goreportcard.com/badge/github.com/bbl/secretize" />
-   <img src="https://github.com/bbl/secretize/workflows/CI/badge.svg">
-   <a href="https://codecov.io/gh/bbl/secretize">
-     <img src="https://codecov.io/gh/bbl/secretize/branch/main/graph/badge.svg" />
+  <img src="https://goreportcard.com/badge/github.com/DevOpsHiveHQ/secretize" />
+<img src="https://github.com/DevOpsHiveHQ/secretize/workflows/CI/badge.svg">
+   <a href="https://codecov.io/gh/DevOpsHiveHQ/secretize">
+      <img src="https://codecov.io/gh/DevOpsHiveHQ/secretize/branch/main/graph/badge.svg" />
    </a>
   
 </p>
@@ -30,6 +30,31 @@ It is possible to use multiple providers at once.
 
 ## Installation
 
+Secretize now supports multiple installation methods:
+
+### Method 1: KRM Function (Recommended)
+
+Secretize supports modern Kubernetes Resource Model (KRM) Functions, which work with Kustomize 4.0.0+:
+
+#### Exec KRM Function
+Download the binary and use it directly:
+```bash
+curl -L https://github.com/DevOpsHiveHQ/secretize/releases/download/v0.0.1/secretize-v0.0.1-linux-amd64.tar.gz | tar -xz
+chmod +x secretize
+```
+
+#### Containerized KRM Function
+Use the Docker image (no installation required):
+```yaml
+# In your kustomization, reference the container image
+annotations:
+  config.kubernetes.io/function: |
+    container:
+      image: ghcr.io/DevOpsHiveHQ/secretize:v0.1.0
+```
+
+### Method 2: Legacy Plugin (Deprecated)
+
 Install secretize to your `$XDG_CONFIG_HOME/kustomize/plugin` folder:
 
 1. Export the `XDG_CONFIG_HOME` variable if it's not already set:
@@ -43,10 +68,66 @@ export XDG_CONFIG_HOME=~/.config
 ```bash
 export SECRETIZE_DIR="$XDG_CONFIG_HOME/kustomize/plugin/secretize/v1/secretgenerator"
 mkdir -p "$SECRETIZE_DIR"
-curl -L https://github.com/bbl/secretize/releases/download/v0.0.1/secretize-v0.0.1-linux-amd64.tar.gz  | tar -xz -C $SECRETIZE_DIR
+curl -L https://github.com/DevOpsHiveHQ/secretize/releases/download/v0.0.1/secretize-v0.0.1-linux-amd64.tar.gz  | tar -xz -C $SECRETIZE_DIR
 ```
 
 ## Usage
+
+### Using KRM Functions (Recommended)
+
+With KRM functions, add the `config.kubernetes.io/function` annotation to your SecretGenerator:
+
+#### Exec KRM Function Example
+```yaml
+# secret-generator.yaml
+apiVersion: secretize/v1
+kind: SecretGenerator
+metadata:
+  name: my-secrets
+  annotations:
+    config.kubernetes.io/function: |
+      exec:
+        path: ./secretize
+sources:
+  - provider: env
+    literals:
+      - DATABASE_URL
+```
+
+Run with: `kustomize build --enable-alpha-plugins --enable-exec .`
+
+#### Containerized KRM Function Example
+```yaml
+# secret-generator.yaml
+apiVersion: secretize/v1
+kind: SecretGenerator
+metadata:
+  name: my-secrets
+  annotations:
+    config.kubernetes.io/function: |
+      container:
+        image: ghcr.io/DevOpsHiveHQ/secretize:v0.1.0 #TODO: Upload the image.
+sources:
+  - provider: env
+    literals:
+      - DATABASE_URL
+```
+
+Run with: `kustomize build --enable-alpha-plugins .`
+
+### Legacy Plugin Usage
+
+For the legacy plugin, use without annotations:
+
+```yaml
+# kustomization.yaml
+generators:
+  - secret-generator.yaml
+```
+
+Run with: `kustomize build --enable-alpha-plugins .`
+
+### Provider Configuration
 
 All providers can generate two types of secrets: `literals` and `kv` (Key-Value secrets).  
 Literal secrets simply generate a single string output, while KV secrets will output with a dictionary of the key-value pairs.   
@@ -279,3 +360,29 @@ data:
   secret_key_1: c2VjcmV0X3ZhbHVlXzE=
   secret_key_2: c2VjcmV0X3ZhbHVlXzI=
 ```
+
+## Examples
+
+Check out the [examples](./examples) directory for complete working examples:
+
+- [Legacy Plugin Example](./examples/legacy) - Traditional Kustomize plugin approach
+- [Exec KRM Function Example](./examples/exec) - Modern exec-based KRM function
+- [Containerized KRM Function Example](./examples/docker) - Docker-based KRM function
+
+## Test Infrastructure
+
+For comprehensive testing with real secret stores, see the [test-infrastructure](./test-infrastructure/) directory which provides:
+
+- **HashiCorp Vault** setup with test secrets
+- **AWS Secrets Manager** emulation via LocalStack  
+- **Kubernetes** cluster with test secrets
+- **Automated testing** for all providers and execution modes
+
+```bash
+cd test-infrastructure
+./test-all-providers.sh
+```
+
+## Documentation
+
+For detailed documentation on KRM Functions support, see [KRM Functions Documentation](./docs/KRM_FUNCTIONS.md).

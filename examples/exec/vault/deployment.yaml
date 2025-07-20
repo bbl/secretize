@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-example-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-example
+  template:
+    metadata:
+      labels:
+        app: docker-example
+    spec:
+      containers:
+      - name: app
+        image: nginx:1.27.0-alpine
+        securityContext:
+          runAsUser: 101
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+        envFrom:
+        - secretRef:
+            name: docker-env-secrets
+        env:
+        - name: RUNTIME
+          value: "container" 
