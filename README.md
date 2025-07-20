@@ -5,10 +5,10 @@
 It's like a swiss army knife, but for kubernetes secrets. </i> 
   <br>
   <br>
-  <img src="https://goreportcard.com/badge/github.com/bbl/secretize" />
-   <img src="https://github.com/bbl/secretize/workflows/CI/badge.svg">
-   <a href="https://codecov.io/gh/bbl/secretize">
-     <img src="https://codecov.io/gh/bbl/secretize/branch/main/graph/badge.svg" />
+  <img src="https://goreportcard.com/badge/github.com/DevOpsHiveHQ/secretize" />
+<img src="https://github.com/DevOpsHiveHQ/secretize/workflows/CI/badge.svg">
+   <a href="https://codecov.io/gh/DevOpsHiveHQ/secretize">
+      <img src="https://codecov.io/gh/DevOpsHiveHQ/secretize/branch/main/graph/badge.svg" />
    </a>
   
 </p>
@@ -39,7 +39,7 @@ Secretize supports modern Kubernetes Resource Model (KRM) Functions, which work 
 #### Exec KRM Function
 Download the binary and use it directly:
 ```bash
-curl -L https://github.com/bbl/secretize/releases/download/v0.0.1/secretize-v0.0.1-linux-amd64.tar.gz | tar -xz
+curl -L https://github.com/DevOpsHiveHQ/secretize/releases/download/v0.0.1/secretize-v0.0.1-linux-amd64.tar.gz | tar -xz
 chmod +x secretize
 ```
 
@@ -50,7 +50,7 @@ Use the Docker image (no installation required):
 annotations:
   config.kubernetes.io/function: |
     container:
-      image: ghcr.io/bbl/secretize:latest
+      image: ghcr.io/DevOpsHiveHQ/secretize:v0.1.0
 ```
 
 ### Method 2: Legacy Plugin (Deprecated)
@@ -68,7 +68,7 @@ export XDG_CONFIG_HOME=~/.config
 ```bash
 export SECRETIZE_DIR="$XDG_CONFIG_HOME/kustomize/plugin/secretize/v1/secretgenerator"
 mkdir -p "$SECRETIZE_DIR"
-curl -L https://github.com/bbl/secretize/releases/download/v0.0.1/secretize-v0.0.1-linux-amd64.tar.gz  | tar -xz -C $SECRETIZE_DIR
+curl -L https://github.com/DevOpsHiveHQ/secretize/releases/download/v0.0.1/secretize-v0.0.1-linux-amd64.tar.gz  | tar -xz -C $SECRETIZE_DIR
 ```
 
 ## Usage
@@ -106,7 +106,7 @@ metadata:
   annotations:
     config.kubernetes.io/function: |
       container:
-        image: ghcr.io/bbl/secretize:latest
+        image: ghcr.io/DevOpsHiveHQ/secretize:v0.1.0 #TODO: Upload the image.
 sources:
   - provider: env
     literals:

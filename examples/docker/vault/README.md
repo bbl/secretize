@@ -22,7 +22,7 @@ A minimal `docker-compose.yml` is provided in this directory to spin up a Vault 
    docker build -t secretize:local .
    cd examples/docker/vault
    ```
-   - If you use `image: ghcr.io/bbl/secretize:latest` in your function config, you can skip this step.
+   - If you use `image: ghcr.io/DevOpsHiveHQ/secretize:v0.1.0` in your function config, you can skip this step.
 3. **Export the required Vault environment variables in your shell:**
    ```bash
    export VAULT_ADDR="http://127.0.0.1:8200"

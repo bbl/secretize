@@ -4,9 +4,9 @@ import (
 	"encoding/base64"
 	"strings"
 
-	"github.com/bbl/secretize/internal/k8s"
-	"github.com/bbl/secretize/internal/providers"
-	"github.com/bbl/secretize/pkg/utils"
+	"github.com/DevOpsHiveHQ/secretize/internal/k8s"
+	"github.com/DevOpsHiveHQ/secretize/internal/providers"
+	"github.com/DevOpsHiveHQ/secretize/pkg/utils"
 	"gopkg.in/yaml.v2"
 	"sigs.k8s.io/kustomize/api/types"
 )

@@ -14,7 +14,14 @@ spec:
     spec:
       containers:
       - name: app
-        image: nginx:latest
+        image: nginx:1.27.0-alpine
+        securityContext:
+          runAsUser: 101
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         envFrom:
         - secretRef:
             name: docker-env-secrets
