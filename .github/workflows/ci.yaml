@@ -1,23 +1,23 @@
-on: push
 name: CI
+on: push
 jobs:
   checks:
-    name: run
+    name: Run
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
 
-      - name: build
+      - name: Build
         uses: cedrickring/golang-action@1.6.0
         with:
           args: make build
 
-      - name: test
+      - name: Test
         uses: cedrickring/golang-action@1.6.0
         with:
           args: make test
 
-      - name: publish code coverage results
+      - name: Publish code coverage results
         run: |
           go test -race -coverprofile=coverage.txt -covermode=atomic ./...
           bash <(curl -s https://codecov.io/bash)
