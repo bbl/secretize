@@ -1,11 +1,13 @@
 package providers
 
 import (
+	"context"
 	"encoding/base64"
-	v12 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"os"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	v1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/tools/clientcmd"
-	"os"
 )
 
 type K8SSecretProvider struct {
@@ -20,7 +22,7 @@ func Base64Decode(src []byte) ([]byte, error) {
 
 func (p *K8SSecretProvider) GetSecret(name string) (string, error) {
 	return getKVSecret(name, func(path string) (map[string]string, error) {
-		s, err := p.Client.Get(path, v12.GetOptions{})
+		s, err := p.Client.Get(context.Background(), path, metav1.GetOptions{})
 		if err != nil {
 			return nil, err
 		}
@@ -38,7 +40,7 @@ func (p *K8SSecretProvider) GetSecret(name string) (string, error) {
 }
 
 func (p *K8SSecretProvider) GetKVSecrets(path string) (map[string]string, error) {
-	res, err := p.Client.Get(path, v12.GetOptions{})
+	res, err := p.Client.Get(context.Background(), path, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}

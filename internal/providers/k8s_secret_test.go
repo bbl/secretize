@@ -1,14 +1,16 @@
 package providers
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
-	v12 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	testclient "k8s.io/client-go/kubernetes/fake"
 	v13 "k8s.io/client-go/kubernetes/typed/core/v1"
-	"testing"
 )
 
 const (
@@ -19,14 +21,14 @@ func configureTestClient() (v13.SecretInterface, error) {
 	k8sClient := testclient.NewSimpleClientset().CoreV1().Secrets("test")
 	secretValue := make([]byte, base64.StdEncoding.EncodedLen(len([]byte(TestSecretValue))))
 	base64.StdEncoding.Encode(secretValue, []byte(TestSecretValue))
-	_, err := k8sClient.Create(&v1.Secret{
-		ObjectMeta: v12.ObjectMeta{
+	_, err := k8sClient.Create(context.Background(), &v1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
 			Name: TestSecretName,
 		},
 		Data: map[string][]byte{
 			TestSecretKey: secretValue,
 		},
-	})
+	}, metav1.CreateOptions{})
 	return k8sClient, err
 }
 
