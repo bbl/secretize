@@ -12,9 +12,9 @@ This example demonstrates how to use Secretize as an exec KRM function with Kust
 Build the secretize binary:
 
 ```bash
-cd ../..
+cd ../../..
 go build -o secretize ./cmd/secretize
-cd examples/exec
+cd examples/exec/env
 ```
 
 ## Usage
