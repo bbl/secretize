@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/DevOpsHiveHQ/secretize/internal/providers"
+	"github.com/bbl/secretize/internal/providers"
 	"github.com/stretchr/testify/assert"
 	"sigs.k8s.io/kustomize/api/types"
 )

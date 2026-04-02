@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/DevOpsHiveHQ/secretize/pkg/generator"
-	"github.com/DevOpsHiveHQ/secretize/pkg/utils"
+	"github.com/bbl/secretize/pkg/generator"
+	"github.com/bbl/secretize/pkg/utils"
 	log "github.com/sirupsen/logrus"
 
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
