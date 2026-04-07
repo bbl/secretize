@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exec-example-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exec-example
+  template:
+    metadata:
+      labels:
+        app: exec-example
+    spec:
+      containers:
+      - name: app
+        image: nginx:latest
+        envFrom:
+        - secretRef:
+            name: exec-env-secrets
+        env:
+        - name: SPECIAL_VAR
+          valueFrom:
+            secretKeyRef:
+              name: exec-env-secrets
+              key: newName 
